@@ -1,8 +1,7 @@
 <template>
   <div id="calendar">
+    <p>{{ year }}年{{ month }}月</p>
     <Button :fullDate="fullDate"/>
-    <p>カレンダーがここに入る</p>
-    <p>{{ year }} {{ month }}</p>
     <table>
       <tr>
         <td v-for="w in week">{{ w }}</td>
@@ -81,18 +80,20 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+ #calendar {
+   color: #666;
+   font-size: 2em;
+   width: 400px;
+   margin: auto;
+ }
+
+ table {
+   border: 1px solid #ef9a9a;
+ }
+
+ table td {
+   padding: 10px;
+ }
+
+
 </style>

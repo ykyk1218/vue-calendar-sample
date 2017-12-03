@@ -24,7 +24,12 @@
 <style scoped>
   .button-wrapper {
     overflow: hidden;
-    width: 500px;
+  }
+  button {
+    margin-bottom: 5px;
+    padding: 8px;
+    background-color: #ef9a9a;
+    color: #fff;
   }
   .button-left {
     float: left;
