@@ -16,16 +16,15 @@
         <DateCell v-for="(w, i) in week" :viewDate="viewDate(i, 3)" />
       </tr>
       <tr>
-        <DateCell v-for="w in week" :viewDate="viewDate(i, 4)" />
+        <DateCell v-for="(w, i) in week" :viewDate="viewDate(i, 4)" />
       </tr>
       <tr>
-        <DateCell v-for="w in week" :viewDate="viewDate(i, 5)" />
+        <DateCell v-for="(w, i) in week" :viewDate="viewDate(i, 5)" />
       </tr>
       <tr>
-        <DateCell v-for="w in week" :viewDate="viewDate(i, 6)" />
+        <DateCell v-for="(w, i) in week" :viewDate="viewDate(i, 6)" />
       </tr>
     </table>
-    <div>{{ viewDate(2, 3) }}</div>
   </div>
 </template>
 
