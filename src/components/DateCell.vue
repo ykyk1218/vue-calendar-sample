@@ -1,38 +1,39 @@
 <template>
-  <td :class="{today: isToday()}">{{ viewDate }}</td>
+  <span :class="{ today: isToday() }">{{ currentDate }}</span>
 </template>
 
 <script>
-
 export default {
   name: 'DateCell',
-  props: ['viewDate'],
-  data: () => {
-    return {
-      isToday: function() {
-        const now = new Date()
-        const year = now.getFullYear()
-        const month = now.getMonth()+1
-        const date = now.getDate()
-        if(this.$parent.year == year &&
-           this.$parent.month == month &&
-           this.viewDate == date) {
-          return true
-        }else{
-          return false
-        }
-      }
+  props: ['currentDateTime'],
+  computed: {
+    currentDate () {
+      return this.currentDateTime.getDate()
+    }
+  },
+  methods: {
+    isToday () {
+      let now = new Date()
+      return (
+        now.getDate() === this.currentDateTime.getDate() &&
+        now.getMonth() === this.currentDateTime.getMonth() &&
+        now.getFullYear() === this.currentDateTime.getFullYear()
+      )
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .today {
-    background-color: #ef9a9a;
-    color: #fff;
-    font-weight: bold;
-    border-radius: 30px;
-  }
+span {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+}
+.today {
+  background-color: #ef9a9a;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 30px;
+}
 </style>

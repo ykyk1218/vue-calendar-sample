@@ -1,98 +1,101 @@
 <template>
   <div id="calendar">
-    <p>{{ year }}年{{ month }}月</p>
-    <Button :fullDate="fullDate"/>
+    <p>{{ currentYear }}年{{ currentMonth }}月</p>
+    <div class="button-wrapper">
+      <v-button class="button-left"  @click="setPrevMonth(currentYear, currentMonth)">&lt; 前</v-button>
+      <v-button class="button-right" @click="setNextMonth(currentYear, currentMonth)">次 &gt;</v-button>
+    </div>
     <table>
       <tr>
-        <td v-for="w in week">{{ w }}</td>
+        <th v-for="week in jpWeekNames">{{ week }}</th>
       </tr>
-      <tr>
-        <DateCell v-for="(w, i) in week" :viewDate="viewDate(i, 1)" />
-      </tr>
-      <tr>
-        <DateCell v-for="(w, i) in week" :viewDate="viewDate(i, 2)" />
-      </tr>
-      <tr>
-        <DateCell v-for="(w, i) in week" :viewDate="viewDate(i, 3)" />
-      </tr>
-      <tr>
-        <DateCell v-for="(w, i) in week" :viewDate="viewDate(i, 4)" />
-      </tr>
-      <tr>
-        <DateCell v-for="(w, i) in week" :viewDate="viewDate(i, 5)" />
-      </tr>
-      <tr>
-        <DateCell v-for="(w, i) in week" :viewDate="viewDate(i, 6)" />
+      <tr v-for="weekRowNumber in 6">
+        <td v-for="weekNumber in 7" v-if="dateTimeFrom(weekRowNumber - 1, weekNumber - 1) != null">
+          <date-cell :currentDateTime="dateTimeFrom(weekRowNumber - 1, weekNumber - 1)"/>
+        </td>
+        <td v-else></td>
       </tr>
     </table>
   </div>
 </template>
 
 <script>
-import DateCell from './DateCell'
-import Button from './Button'
-
-const d = new Date()
-const year = d.getFullYear()
-const month = d.getMonth()+1
+import DateCell from '@/components/DateCell'
+import Button from '@/components/Button'
 
 export default {
   name: 'Calendar',
   components: {
     DateCell,
-    Button
+    VButton: Button
   },
-  data: function() {
+  data () {
     return {
-      week: ["日","月","火","水","木","金","土"],
-      year: year,
-      month: month,
-      viewDate: function(weekIndex, row) {
-        let startDateWeek = new Date(this.year, this.month-1, 1).getDay()
-        let endMonthDate = new Date(this.year, this.month, 0).getDate()
-        if(row === 1 && weekIndex < startDateWeek ) {
-          console.log(startDateWeek)
-          return ""
-        }else if(this.date >= endMonthDate) {
-          return ""
-        }
-        this.setDate()
-        return this.date
-      },
-      fullDate: d,
-      i:0
+      jpWeekNames: ['日', '月', '火', '水', '木', '金', '土'],
+      currentYear: new Date().getFullYear(),
+      currentMonth: new Date().getMonth() + 1
+    }
+  },
+  computed: {
+    beginningOfMonth () {
+      return new Date(this.currentYear, this.currentMonth - 1)
+    },
+    endOfMonth () {
+      return new Date(this.currentYear, this.currentMonth, 0)
     }
   },
   methods: {
-    setDate: function() {
-      if(this.date == undefined || this.date === 0) {
-        this.date = 1
-      }else{
-        this.date += 1
+    dateTimeFrom (weekRowIndex, weekIndex) {
+      let dateIndex = weekRowIndex * 7 + weekIndex - this.beginningOfMonth.getDay()
+      let date = dateIndex + 1
+      if (date < 1 || this.endOfMonth.getDate() < date) {
+        return null
       }
+      return new Date(this.currentYear, this.currentMonth - 1, date)
+    },
+    setNextMonth () {
+      let nextMonth = new Date(this.currentYear, this.currentMonth)
+      this.currentYear = nextMonth.getFullYear()
+      this.currentMonth = nextMonth.getMonth() + 1
+    },
+    setPrevMonth () {
+      let prevMonth = new Date(this.currentYear, this.currentMonth - 2)
+      this.currentYear = prevMonth.getFullYear()
+      this.currentMonth = prevMonth.getMonth() + 1
     }
   }
 }
-
-
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
- #calendar {
-   color: #666;
-   font-size: 2em;
-   width: 400px;
-   margin: auto;
- }
+#calendar {
+  color: #666;
+  font-size: 2em;
+  width: 400px;
+  margin: auto;
+}
 
- table {
-   border: 1px solid #ef9a9a;
- }
+table {
+  border: 1px solid #ef9a9a;
+}
 
- table td {
-   padding: 10px;
- }
+table td {
+  padding: 10px;
+}
 
+table th {
+  padding: 10px;
+}
 
+.button-wrapper {
+  overflow: hidden;
+}
+
+.button-left {
+  float: left;
+}
+
+.button-right {
+  float: right;
+}
 </style>
